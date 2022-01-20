@@ -40,6 +40,60 @@ Add this line:
 
 Implements a minimalistic change management process within RT.
 
+It is often the case that businesses that have achieved some level of ISO or
+SOC compliance must have a standardized process by which to handle changes to
+software, hardware, infrastructure, etc. This extension implements a minimal
+change management system within RT. It provides a framework for handling a 
+variety of change types, and leaves a lot of room for growth and flexibility
+with regards to your organization's practices and procedures.
+
+When combined with L<RT::Extension::MandatoryOnTransition>, this extension 
+can transform into a fully-featured change management system.
+
+=head2 Change Management Queue
+
+After installing, you'll see a new queue called L<Change Management> for tracking
+all of the incoming change requests. You can change the name to anything you like 
+after installing. In a typical configuration, you will also want to assign an RT 
+email address, like changes@example.com or crb@example.com (Change Review Board)
+to create tickets in this queue.
+
+=head2 Custom Roles
+
+=head2 Groups
+
+=head3 Ticket Statuses
+
+Tickets in the change management queue can have any one of the following statuses:
+
+=over 4
+
+=item * Requested
+
+Status given to a new item. Indicates than a change has been requested and is 
+awaiting approval.
+
+=item * Approved
+
+Tickets with a status of Requested can be moved to Approved if the change has been
+accepted by the change review team.
+
+=item * Deployed
+
+=back
+
+=head2 Change Management Lifecycle
+
+=head2 Custom Fields
+
+=head3 Change Category
+
+=head3 Change Type
+
+=head3 Deployed Date
+
+=head3 Rollback Plan
+
 =back
 
 =head1 AUTHOR
