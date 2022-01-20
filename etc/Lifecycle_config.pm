@@ -47,8 +47,8 @@ Set(%Lifecycles,
             'Approved'           => 'open',
             # TODO: Not sure what to do with these
             'Partially Deployed' => 'stalled', 
-            'Failed'             => '',
-            'Cancelled'          => '',
+            'Failed'             => 'resolved',
+            'Cancelled'          => 'resolved',
         },
     }
 );
