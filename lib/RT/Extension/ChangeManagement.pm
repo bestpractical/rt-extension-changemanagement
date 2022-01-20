@@ -6,18 +6,11 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-RT-Extension-ChangeManagement - [One line description of module's purpose here]
-
-=head1 DESCRIPTION
-
-[Why would someone install this extension? What does it do? What problem
-does it solve?]
+RT-Extension-ChangeManagement - Default Change Management configuration for RT
 
 =head1 RT VERSION
 
-Works with RT [What versions of RT is this known to work with?]
-
-[Make sure to use requires_rt and rt_too_new in Makefile.PL]
+Works with RT 5.
 
 =head1 INSTALLATION
 
@@ -43,6 +36,10 @@ Add this line:
 
 =item Restart your webserver
 
+=head1 DESCRIPTION
+
+Implements a minimalistic change management process within RT.
+
 =back
 
 =head1 AUTHOR
@@ -62,7 +59,7 @@ href="http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-ChangeManage
 
 =head1 LICENSE AND COPYRIGHT
 
-This software is Copyright (c) 2022 by Jason A. Crome
+This software is Copyright (c) 2022 by Best Practical Solutions, LLC.
 
 This is free software, licensed under:
 

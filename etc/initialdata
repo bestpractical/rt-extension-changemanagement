@@ -1,0 +1,108 @@
+use strict;
+use warnings;
+
+our @Queues = (
+    { 
+        Name              => 'Change Management',
+        Description       => 'Queue for change management requests',
+        Lifecycle         => 'Change Management',
+        CorrespondAddress => "",
+        CommentAddress    => "",
+    },
+);
+
+our @CustomFields = (
+    {
+        Name        => 'Change Status',
+        Type        => 'SelectSingle',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Description => '',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        RenderType  => 'Dropdown',
+        Values      => [
+            { Name => 'Requested',          SortOrder => 1 },
+            { Name => 'Approved',           SortOrder => 2 },
+            { Name => 'Deployed',           SortOrder => 3 },
+            { Name => 'Partially Deployed', SortOrder => 4 },
+            { Name => 'Failed',             SortOrder => 5 },
+            { Name => 'Cancelled',          SortOrder => 6 },
+            { Name => 'Rejected',           SortOrder => 7 },
+        ],
+        SortOrder   => 1
+    },
+    {
+        Name        => 'Change Category',
+        Type        => 'SelectSingle',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Description => '',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        RenderType  => 'Dropdown',
+        Values      => [
+            { Name => 'Configuration Change',   SortOrder => 1 },
+            { Name => 'OS Patching',            SortOrder => 2 },
+            { Name => 'Firmware Update',        SortOrder => 3 },
+            { Name => 'Software Update',        SortOrder => 4 },
+            { Name => 'New Software Install',   SortOrder => 5 },
+            { Name => 'Hardware Repair',        SortOrder => 6 },
+            { Name => 'New Hardware Install',   SortOrder => 7 },
+            { Name => 'Project Implementation', SortOrder => 7 },
+        ],
+        SortOrder   => 2
+    },
+    {
+        Name        => 'Change Type',
+        Type        => 'SelectSingle',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Description => '',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        RenderType  => 'Dropdown',
+        Values      => [
+            { Name => 'Standard',  SortOrder => 1 },
+            { Name => 'Normal',    SortOrder => 2 },
+            { Name => 'Emergency', SortOrder => 3 },
+        ],
+        SortOrder   => 3
+    },
+    {
+        Name              => 'Deployed Date',
+        Description       => 'Date the change was deployed',
+        LookupType        => 'RT::Queue-RT::Ticket',
+        Type              => 'DateTime',
+        MaxValues         => 1,
+        SortOrder         => 4,
+    },
+    {
+        Name              => 'Rollback Plan',
+        Description       => 'Explain the backout plan to restore normal operations',
+        LookupType        => 'RT::Queue-RT::Ticket',
+        Type              => 'Text',
+        MaxValues         => 1,
+        SortOrder         => 5,
+    },
+);
+
+our @Groups = (
+    {
+        Name        => 'Change Review Board',
+        Description => 'People responsible for approving change requests',
+    },
+);
+
+our @CustomRoles = (
+    {
+        Name        => 'Change Reviewer',
+        Description => 'The person asked to review the change request',
+        ApplyTo     => 'Change Management',
+        MaxValues   => 1,
+    },
+    {
+        Name        => 'Change Implementor',
+        Description => 'The person asked to implement the change request',
+        ApplyTo     => 'Change Management',
+        MaxValues   => 1,
+    },
+);
+
