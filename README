@@ -1,0 +1,92 @@
+NAME
+    RT-Extension-ChangeManagement - Default Change Management configuration
+    for RT
+
+RT VERSION
+    Works with RT 5.
+
+INSTALLATION
+    perl Makefile.PL
+    make
+    make install
+        May need root permissions
+
+    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+        Add this line:
+
+            Plugin('RT::Extension::ChangeManagement');
+
+    Clear your mason cache
+            rm -rf /opt/rt4/var/mason_data/obj
+
+    Restart your webserver
+
+DESCRIPTION
+    Implements a minimalistic change management process within RT.
+
+    It is often the case that businesses that have achieved some level of
+    ISO or SOC compliance must have a standardized process by which to
+    handle changes to software, hardware, infrastructure, etc. This
+    extension implements a minimal change management system within RT. It
+    provides a framework for handling a variety of change types, and leaves
+    a lot of room for growth and flexibility with regards to your
+    organization's practices and procedures.
+
+    When combined with RT::Extension::MandatoryOnTransition, this extension
+    can transform into a fully-featured change management system.
+
+  Change Management Queue
+    After installing, you'll see a new queue called "Change Management" for
+    tracking all of the incoming change requests. You can change the name to
+    anything you like after installing. In a typical configuration, you will
+    also want to assign an RT email address, like changes@example.com or
+    crb@example.com (Change Review Board) to create tickets in this queue.
+
+  Custom Roles
+  Groups
+   Ticket Statuses
+    Tickets in the change management queue can have any one of the following
+    statuses:
+
+    *   Requested
+
+        Status given to a new item. Indicates than a change has been
+        requested and is awaiting approval.
+
+    *   Approved
+
+        Tickets with a status of Requested can be moved to Approved if the
+        change has been accepted by the change review team.
+
+    *   Deployed
+
+  Change Management Lifecycle
+  Custom Fields
+   Change Category
+   Change Type
+   Deployed Date
+   Rollback Plan
+AUTHOR
+    Best Practical Solutions, LLC <modules@bestpractical.com>
+
+    All bugs should be reported via email to
+        bug-RT-Extension-ChangeManagement@rt.cpan.org
+    or via the web at
+        http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-ChangeManagement
+LICENSE AND COPYRIGHT
+    This software is Copyright (c) 2022 by Best Practical Solutions, LLC.
+
+    This is free software, licensed under:
+
+      The GNU General Public License, Version 2, June 1991
+
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 39:
+        You forgot a '=back' before '=head1'
+
+    Around line 97:
+        =back without =over
+

@@ -1,5 +1,5 @@
 Set(%Lifecycles,
-    'ChangeManagement' => {
+    'Change Management' => {
         initial         => [ qw( Requested ) ], # loc_qw
         active          => [ 'Approved', 'In Progress', 'Partially Deployed' ], # loc_qw
         inactive        => [ qw( Deployed Failed Cancelled Rejected deleted ) ], # loc_qw
