@@ -11,7 +11,7 @@ Set(%Lifecycles,
         transitions => {
             # The following transition is required for ticket creation
             ''                   => [ qw( Requested ) ],
-            Submitted            => [ qw( Approved Cancelled Rejected deleted ) ],
+            Requested            => [ qw( Approved Cancelled Rejected deleted ) ],
             Approved             => [ 'In Progress', qw( Cancelled Rejected deleted ) ],
             'In Progress'        => [ 'Partially Deployed', qw( Deployed Failed Cancelled deleted ) ],
             'Partially Deployed' => [ qw( Deployed Failed Cancelled deleted ) ],

@@ -13,29 +13,10 @@ our @Queues = (
 
 our @CustomFields = (
     {
-        Name        => 'Change Status',
-        Type        => 'SelectSingle',
-        LookupType  => 'RT::Queue-RT::Ticket',
-        Description => '',
-        ApplyTo     => ['Change Management'],
-        MaxValues   => 1,
-        RenderType  => 'Dropdown',
-        Values      => [
-            { Name => 'Requested',          SortOrder => 1 },
-            { Name => 'Approved',           SortOrder => 2 },
-            { Name => 'Deployed',           SortOrder => 3 },
-            { Name => 'Partially Deployed', SortOrder => 4 },
-            { Name => 'Failed',             SortOrder => 5 },
-            { Name => 'Cancelled',          SortOrder => 6 },
-            { Name => 'Rejected',           SortOrder => 7 },
-        ],
-        SortOrder   => 1
-    },
-    {
         Name        => 'Change Category',
+        Description => 'High-level categorization of the requested change',
         Type        => 'SelectSingle',
         LookupType  => 'RT::Queue-RT::Ticket',
-        Description => '',
         ApplyTo     => ['Change Management'],
         MaxValues   => 1,
         RenderType  => 'Dropdown',
@@ -49,13 +30,13 @@ our @CustomFields = (
             { Name => 'New Hardware Install',   SortOrder => 7 },
             { Name => 'Project Implementation', SortOrder => 7 },
         ],
-        SortOrder   => 2
+        SortOrder   => 1
     },
     {
         Name        => 'Change Type',
-        Type        => 'SelectSingle',
+        Description => 'Kind of service change being requested',
         LookupType  => 'RT::Queue-RT::Ticket',
-        Description => '',
+        Type        => 'SelectSingle',
         ApplyTo     => ['Change Management'],
         MaxValues   => 1,
         RenderType  => 'Dropdown',
@@ -64,23 +45,25 @@ our @CustomFields = (
             { Name => 'Normal',    SortOrder => 2 },
             { Name => 'Emergency', SortOrder => 3 },
         ],
-        SortOrder   => 3
+        SortOrder   => 2
     },
     {
-        Name              => 'Deployed Date',
-        Description       => 'Date the change was deployed',
-        LookupType        => 'RT::Queue-RT::Ticket',
-        Type              => 'DateTime',
-        MaxValues         => 1,
-        SortOrder         => 4,
+        Name        => 'Deployed Date',
+        Description => 'Date the change was deployed',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Type        => 'DateTime',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        SortOrder   => 3,
     },
     {
-        Name              => 'Rollback Plan',
-        Description       => 'Explain the backout plan to restore normal operations',
-        LookupType        => 'RT::Queue-RT::Ticket',
-        Type              => 'Text',
-        MaxValues         => 1,
-        SortOrder         => 5,
+        Name        => 'Rollback Plan',
+        Description => 'Explain the backout plan to restore normal operations',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Type        => 'Text',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        SortOrder   => 4,
     },
 );
 
