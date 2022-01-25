@@ -32,7 +32,7 @@ Add this line:
 
 =item Clear your mason cache
 
-    rm -rf /opt/rt4/var/mason_data/obj
+    rm -rf /opt/rt5/var/mason_data/obj
 
 =item Restart your webserver
 
@@ -45,7 +45,8 @@ SOC compliance must have a standardized process by which to handle changes to
 software, hardware, infrastructure, etc. This extension implements a minimal
 change management system within RT. It provides a framework for handling a 
 variety of change types, and leaves a lot of room for growth and flexibility
-with regards to your organization's practices and procedures.
+with regards to your organization's practices and procedures. Out of the box,
+it resembles a scaled down version of an ITIL-like change management process.
 
 When combined with L<RT::Extension::MandatoryOnTransition>, this extension 
 can transform into a fully-featured change management system.
@@ -55,7 +56,7 @@ can transform into a fully-featured change management system.
 After installing, you'll see a new queue called L<Change Management> for tracking
 all of the incoming change requests. You can change the name to anything you like 
 after installing. In a typical configuration, you will also want to assign an RT 
-email address, like changes@example.com or crb@example.com (Change Review Board)
+email address, like changes@example.com or crb@example.com (Change Review Team)
 to create tickets in this queue.
 
 =head2 Custom Roles
@@ -78,7 +79,32 @@ awaiting approval.
 Tickets with a status of Requested can be moved to Approved if the change has been
 accepted by the change review team.
 
+=item * In Progress
+
+An approved change that is in the process of being deployed.
+
+=item * Partially Deployed
+
+The change has been partially deployed; it is either taking an unusually long time
+to complete, or part of the deployment succeeded while another part failed. Reasons
+as to why should be detailed in a comment.
+
 =item * Deployed
+
+The change has been deployed successfully.
+
+=item * Failed
+
+The change failed to deploy. Reasons should be detailed in a comment.
+
+=item * Cancelled
+
+This change was cancelled. Reasoning should be provided in a comment.
+
+=item * Rejected
+
+The change was rejected by the review team. Reasoning should be provided in a 
+comment on the ticket.
 
 =back
 
@@ -89,6 +115,24 @@ accepted by the change review team.
 =head3 Change Category
 
 =head3 Change Type
+
+One of the three types of change types outlined in ITIL:
+
+=over 4
+
+=item * Standard 
+
+A low risk, pre-authorized change that follows a repeatable process.
+
+=item * Emergency
+
+A change that must be performed ASAP, potentially bypassing approval steps.
+
+=item * Normal
+
+Any change that doesn't fall into the other types.
+
+=back
 
 =head3 Deployed Date
 
