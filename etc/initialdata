@@ -69,7 +69,7 @@ our @CustomFields = (
 
 our @Groups = (
     {
-        Name        => 'Change Review Board',
+        Name        => 'Change Review Team',
         Description => 'People responsible for approving change requests',
     },
 );
