@@ -1,54 +1,57 @@
 Set(%Lifecycles,
     'Change Management' => {
-        initial         => [ qw( Requested ) ], # loc_qw
-        active          => [ 'Approved', 'In Progress', 'Partially Deployed' ], # loc_qw
-        inactive        => [ qw( Deployed Failed Cancelled Rejected deleted ) ], # loc_qw
+        initial         => [ qw( requested ) ], # loc_qw
+        active          => [ 'approved', 'in progress', 'partially deployed' ], # loc_qw
+        inactive        => [ qw( deployed failed cancelled rejected deleted ) ], # loc_qw
         defaults => {
-            on_create            => 'Requested',
-            approved             => 'Approved',
-            denied               => 'Rejected',
+            on_create            => 'requested',
+            approved             => 'approved',
+            denied               => 'rejected',
         },
         transitions => {
+            # TODO: ease these, handle more with actions.
             # The following transition is required for ticket creation
-            ''                   => [ qw( Requested ) ],
-            Requested            => [ qw( Approved Cancelled Rejected deleted ) ],
-            Approved             => [ 'In Progress', qw( Cancelled Rejected deleted ) ],
-            'In Progress'        => [ 'Partially Deployed', qw( Deployed Failed Cancelled deleted ) ],
-            'Partially Deployed' => [ qw( Deployed Failed Cancelled deleted ) ],
-            Deployed             => [ 'In Progress', 'Partially Deployed', qw( Failed Cancelled deleted ) ],
-            Failed               => [ qw( Cancelled deleted ) ],
-            Cancelled            => [ qw( Requested Approved ) ],
-            Rejected             => [ qw( Requested Approved ) ],
+            ''                   => [ qw( requested ) ],
+            requested            => [ qw( approved cancelled rejected deleted ) ],
+            approved             => [ 'in progress', qw( cancelled rejected deleted ) ],
+            'in progress'        => [ 'partially deployed', qw( deployed failed cancelled deleted ) ],
+            'partially deployed' => [ qw( deployed failed cancelled deleted ) ],
+            deployed             => [ 'in progress', 'partially deployed', qw( failed cancelled deleted ) ],
+            failed               => [ qw( cancelled deleted ) ],
+            cancelled            => [ qw( requested approved ) ],
+            rejected             => [ qw( requested approved ) ],
         },
         rights => {
-            'Requested -> *' => 'Change Reviewer',
+            'requested -> *' => 'Change Reviewer',
         },
         actions => [
-            '* -> Requested' => {
+            #'* -> Requested' => {
+                #label  => 'Submit For Approval',
+            #},
+            'requested -> approved' => {
                 label  => 'Submit For Approval',
             },
         ]
     },
     __maps__ => {
         'default -> Change Management' => {
-            'new'         => 'Requested',
-            'resolved'    => 'Deployed',
-            'open'        => 'In Progress',
-            'rejected'    => 'Rejected',
-            'stalled'     => 'Partially Deployed', # TODO: ???
+            'new'         => 'requested',
+            'resolved'    => 'deployed',
+            'open'        => 'in progress',
+            'rejected'    => 'rejected',
+            'stalled'     => 'partially deployed', # TODO: ???
             'deleted'     => 'deleted',
         },
         'Change Management -> default' => {
-            'Requested'          => 'new',
-            'Deployed'           => 'resolved',
-            'Rejected'           => 'rejected',
+            'requested'          => 'new',
+            'deployed'           => 'resolved',
+            'rejected'           => 'rejected',
             'deleted'            => 'deleted',
-            'In Progress'        => 'open',
-            'Approved'           => 'open',
-            # TODO: Not sure what to do with these
-            'Partially Deployed' => 'stalled', 
-            'Failed'             => 'resolved',
-            'Cancelled'          => 'resolved',
+            'in progress'        => 'open',
+            'approved'           => 'open',
+            'partially deployed' => 'open', 
+            'failed'             => 'resolved',
+            'cancelled'          => 'resolved',
         },
     }
 );
