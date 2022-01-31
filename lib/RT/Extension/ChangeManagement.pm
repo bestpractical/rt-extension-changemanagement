@@ -36,6 +36,8 @@ Add this line:
 
 =item Restart your webserver
 
+=back 
+
 =head1 DESCRIPTION
 
 Implements a minimalistic change management process within RT.
@@ -61,47 +63,66 @@ to create tickets in this queue.
 
 =head2 Custom Roles
 
+There are two roles than can be assigned to users that are part of the change 
+management process:
+
+=over
+
+=item Change Reviewer
+
+Someone who can approve a change request
+
+=item Change Implementor
+
+Someone who can implement a change request
+
+=back
+
 =head2 Groups
 
-=head3 Ticket Statuses
+The Change Management extension introduces one new group to RT: Change Review Team.
+Any members of this group are capable of approving or rejecting proposed changes in
+the Change Management queue.
+
+=head2 Ticket Statuses
 
 Tickets in the change management queue can have any one of the following statuses:
 
-=over 4
+=over 
 
-=item * Requested
+=item Requested
 
 Status given to a new item. Indicates than a change has been requested and is 
 awaiting approval.
 
-=item * Approved
+=item Approved
 
 Tickets with a status of Requested can be moved to Approved if the change has been
 accepted by the change review team.
 
-=item * In Progress
+=item In Progress
 
 An approved change that is in the process of being deployed.
 
-=item * Partially Deployed
+=item Partially Deployed
 
 The change has been partially deployed; it is either taking an unusually long time
 to complete, or part of the deployment succeeded while another part failed. Reasons
 as to why should be detailed in a comment.
 
-=item * Deployed
+=item Deployed
 
 The change has been deployed successfully.
 
-=item * Failed
+=item Failed
 
 The change failed to deploy. Reasons should be detailed in a comment.
 
-=item * Cancelled
+=item Cancelled
 
 This change was cancelled. Reasoning should be provided in a comment.
 
-=item * Rejected
+=item Rejected
 
 The change was rejected by the review team. Reasoning should be provided in a 
 comment on the ticket.
@@ -114,21 +135,43 @@ comment on the ticket.
 
 =head3 Change Category
 
+Specifies the kind of change that is to be performed. Possible values include:
+
+=over
+
+=item Configuration Change
+
+=item OS Patching
+
+=item Firmware Update
+
+=item Software Update
+
+=item New Software Install
+
+=item Hardware Repair
+
+=item New Hardware Install
+
+=item Project Implementation
+
+=back
+
 =head3 Change Type
 
 One of the three types of change types outlined in ITIL:
 
-=over 4
+=over 
 
-=item * Standard 
+=item Standard 
 
 A low risk, pre-authorized change that follows a repeatable process.
 
-=item * Emergency
+=item Emergency
 
 A change that must be performed ASAP, potentially bypassing approval steps.
 
-=item * Normal
+=item Normal
 
 Any change that doesn't fall into the other types.
 
@@ -136,9 +179,14 @@ Any change that doesn't fall into the other types.
 
 =head3 Deployed Date
 
+Date that the change was successfully deployed (or, partially deployed)
+
 =head3 Rollback Plan
 
-=back
+A description of the steps necessary to perform a rollback of the proposed
+changes in the event that the deployment process is unsuccessful.
+
+=head1 CUSTOMIZING AND EXTENDING
 
 =head1 AUTHOR
 
