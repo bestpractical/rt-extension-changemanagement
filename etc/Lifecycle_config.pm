@@ -31,10 +31,10 @@ Set(%Lifecycles,
                 label  => 'Submit Request',
             },
             'requested -> approved' => {
-                label  => 'Approve',
+                label  => 'Approve Request',
             },
             'requested -> rejected' => {
-                label  => 'Deny',
+                label  => 'Deny Request',
             },
             'approved -> in progress' => {
                 label  => 'Start Implementation',
