@@ -186,7 +186,102 @@ Date that the change was successfully deployed (or, partially deployed)
 A description of the steps necessary to perform a rollback of the proposed
 changes in the event that the deployment process is unsuccessful.
 
+=head2 Actions
+
+=head3 Submit Request
+
+Changes the status of a ticket to requested.
+
+=head3 Approve Request
+
+Mark a change management request ticket as approved. Requires the Change Reviewer role.
+
+=head3 Deny Request
+
+Deny the change management request. Requires the Change Reviewer role.
+
+=head3 Start Implementation
+
+Changes the ticket status to in progress. Requires the Change Implementor role.
+
+=head3 Complete Implementation
+
+Marks the change request as deployed. Requires the Change Implementor role.
+
+=head3 Partially Complete
+
+Marks the change request as partially deployed. Requires the Change Implementor role.
+
+=head3 Deployment Failed
+
+Changes the status of the request to failed. Requires the Change Implementor role.
+
+=head3 Deployment Cancelled
+
+Cancels the change request (changes status to failed). Requires the Change Implementor role.
+
+=head2 Rights
+
+=head3 Change Reviewer
+
+Person who reviews incoming change requests, and is responsible for approving or
+denying a change request. Can be assigned to a group.
+
+=head3 Change Implementor
+
+Person who is responsible for implementing a change request. This role can be assigned
+to a group.
+
 =head1 CUSTOMIZING AND EXTENDING
+
+There are some ways RT::Extension::ChangeManagement can be customized to provide
+an even more robust change management system.
+
+=head2 Additional Custom Fields
+
+Some ideas of fields that could be added to the change management process might include:
+
+=over
+
+=item Change Origin
+
+Customer, Vendor, Internal. Dropdown.
+
+=item Location
+
+Datacenter, customer site, etc. Text.
+
+=item Implementation Steps
+
+Steps needed to implement proposed change. Text.
+
+=item Validation Steps
+
+Process for validating a change was deployed successfully. Text.
+
+=item Impact Assessment
+
+A description of what potential side effects of a proposed change might be, what 
+could happen if the change goes awry, etc. Text.
+
+=back
+
+=head3 Making Custom Fields Required
+
+Using L<RT::Extension::MandatoryOnTransition>, any of the above fields can be made
+required upon a status change. For example, you may wish to make Implementation Steps,
+Validation Steps, and Impact Assessment required fields before a change request can
+be approved.
+
+=head2 Approvals Queue
+
+If you have an established Change Review Board, your organization is likely dealing
+with a high volume of change requests. Separating requests into a second queue can 
+make it quicker and easier to process, as new requests are not interspersed with 
+other changes in various stages of completion.
+
+To separate change requests into a separate approvals queue, see the docs in the
+L<Customizing/Approvals> guide.
 
 =head1 AUTHOR
 
