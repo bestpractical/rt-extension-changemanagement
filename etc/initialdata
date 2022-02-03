@@ -14,7 +14,7 @@ our @Queues = (
 our @CustomFields = (
     {
         Name        => 'Change Category',
-        Description => 'High-level categorization of the requested change',
+        EntryHint   => 'High-level categorization of the requested change',
         Type        => 'SelectSingle',
         LookupType  => 'RT::Queue-RT::Ticket',
         ApplyTo     => ['Change Management'],
@@ -34,7 +34,7 @@ our @CustomFields = (
     },
     {
         Name        => 'Change Type',
-        Description => 'Kind of service change being requested',
+        EntryHint   => 'Kind of service change being requested',
         LookupType  => 'RT::Queue-RT::Ticket',
         Type        => 'SelectSingle',
         ApplyTo     => ['Change Management'],
@@ -48,8 +48,8 @@ our @CustomFields = (
         SortOrder   => 2
     },
     {
-        Name        => 'Deployed Date',
-        Description => 'Date the change was deployed',
+        Name        => 'Change Completed',
+        EntryHint   => 'Date when this change the change was completed',
         LookupType  => 'RT::Queue-RT::Ticket',
         Type        => 'DateTime',
         ApplyTo     => ['Change Management'],
@@ -58,7 +58,7 @@ our @CustomFields = (
     },
     {
         Name        => 'Rollback Plan',
-        Description => 'Explain the backout plan to restore normal operations',
+        EntryHint   => 'Explain the backout plan to restore normal operations',
         LookupType  => 'RT::Queue-RT::Ticket',
         Type        => 'Text',
         ApplyTo     => ['Change Management'],
