@@ -2,7 +2,7 @@
 # ticket display
 Set(%CustomFieldGroupings,
     'RT::Ticket' => [
-        'Dates' => ['Deployed Date'],
+        'Dates' => ['Change Completed'],
         'Change Management' => [
             'Change Category',
             'Change Type',
@@ -51,21 +51,40 @@ Set(%Lifecycles,
             },
             'requested -> rejected' => {
                 label  => 'Deny Request',
+                update => 'Respond',
+            },
+            'requested -> cancelled' => {
+                label  => 'Deployment Cancelled',
+                update => 'Respond',
             },
             'approved -> in progress' => {
-                label  => 'Start Implementation',
+                label  => 'Start Deployment',
             },
             'in progress -> deployed' => {
-                label  => 'Complete Implementation',
+                label  => 'Deployment Complete',
             },
             'in progress -> partially deployed' => {
-                label  => 'Partially Complete',
+                label  => 'Partially Deployed',
+                update => 'Respond',
             },
             'in progress -> failed' => {
                 label  => 'Deployment Failed',
+                update => 'Respond',
             },
             'in progress -> cancelled' => {
                 label  => 'Deployment Cancelled',
+                update => 'Respond',
+            },
+            'partially deployed -> deployed' => {
+                label  => 'Deployment Complete',
+            },
+            'partially deployed -> failed' => {
+                label  => 'Deployment Failed',
+                update => 'Respond',
+            },
+            'partially deployed -> cancelled' => {
+                label  => 'Deployment Cancelled',
+                update => 'Respond',
             },
         ]
     },
