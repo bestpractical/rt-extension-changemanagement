@@ -24,11 +24,16 @@ Works with RT 5.
 
 May need root permissions
 
-=item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
+=item Edit your F</opt/rt5/etc/RT_SiteConfig.pm>
 
 Add this line:
 
     Plugin('RT::Extension::ChangeManagement');
+
+=item C<make initdb>
+
+Only run this the first time you install this module. If you run this twice, 
+you may end up with duplicate data in your database.
 
 =item Clear your mason cache
 
@@ -55,7 +60,7 @@ can transform into a fully-featured change management system.
 
 =head2 Change Management Queue
 
-After installing, you'll see a new queue called L<Change Management> for tracking
+After installing, you'll see a new queue called B<Change Management> for tracking
 all of the incoming change requests. You can change the name to anything you like 
 after installing. In a typical configuration, you will also want to assign an RT 
 email address, like changes@example.com or crb@example.com (Change Review Team)
@@ -128,8 +133,6 @@ The change was rejected by the review team. Reasoning should be provided in a
 comment on the ticket.
 
 =back
-
-=head2 Change Management Lifecycle
 
 =head2 Custom Fields
 
