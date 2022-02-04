@@ -168,7 +168,8 @@ One of the three types of change types outlined in ITIL:
 
 =item Standard 
 
-A low risk, pre-authorized change that follows a repeatable process.
+A low risk, pre-authorized change that follows a repeatable process. This is the
+default for new tickets in the Change Management queue.
 
 =item Emergency
 
@@ -203,15 +204,15 @@ Mark a change management request ticket as approved. Requires the Change Reviewe
 
 Deny the change management request. Requires the Change Reviewer role.
 
-=head3 Start Implementation
+=head3 Start Deployment
 
 Changes the ticket status to in progress. Requires the Change Implementor role.
 
-=head3 Complete Implementation
+=head3 Deployment Complete
 
 Marks the change request as deployed. Requires the Change Implementor role.
 
-=head3 Partially Complete
+=head3 Partially Deployed
 
 Marks the change request as partially deployed. Requires the Change Implementor role.
 
@@ -275,6 +276,25 @@ Using L<RT::Extension::MandatoryOnTransition>, any of the above fields can be ma
 required upon a status change. For example, you may wish to make Implementation Steps,
 Validation Steps, and Impact Assessment required fields before a change request can
 be approved.
+
+=head3 Default Values for Custom Fields
+
+If you look at F<etc/initialdata> in the plugin directory, you will find a section
+called C<@Final> (unsurprisingly, it is the last section of configuration).
+There you will find some sample code and documentation for setting a default value 
+for a custom field.
+
+The process basically boils down to:
+
+=over
+
+=item Load a named queue
+
+=item Load a custom field by name
+
+=item Set the default value for that custom field in that queue
+
+=back
 
 =head2 Approvals Queue
 
