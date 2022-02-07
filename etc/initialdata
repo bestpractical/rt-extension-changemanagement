@@ -89,17 +89,44 @@ our @CustomRoles = (
     },
 );
 
+# 
+# Create some saved searches; these will form the basis of the dashboard below. Add more
+# to suit your organization's needs.
 #
-# This is an example of how to make a custom field have a default value.
-# As most changes will be Standard, it makes sense to use it as the default.
-# You can similarly make other custom fields defined above have default values
-# by providing the name of the custom field to Load (like Change Type is below)
-# and changing Values to be the default value of the field (similar to how Standard
-# is set below).
-#
-# Remember that the custom field name and default values are case sensitive!
-#
+our @Attributes = (
+    { Name => 'Search - Changes Scheduled, Next 7 Days',
+      Description => 'Change management requests due in the next 7 days', # loc
+      Content     =>
+      { Format =>  q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:#',}
+                 . q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>/TITLE:Subject',}
+                 . q{Due,'CF.{Change Type}', 'CF.{Change Category}'},
+        Query    => 'Queue = \'Change Management\' AND Status = \'approved\' AND \'due\' <= \'7 days\'',
+        OrderBy  => 'due ASC',
+      },
+    },
+    { Name => 'Search - Changes Deployed, Last 30 Days',
+      Description => 'Change management requests completed in the last 30 days', # loc
+      Content     =>
+      { Format =>  q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:#',}
+                 . q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>/TITLE:Subject',}
+                 . q{'CF.{Change Completed}','CF.{Change Type}', 'CF.{Change Category}'},
+        Query    => 'Queue = \'Change Management\' AND Status = \'deployed\' AND \'CF.{Change Completed}\' >= \'30 days ago\'',
+        OrderBy  => 'due ASC',
+      },
+    },
+);
+
 our @Final = sub {
+    #
+    # This is an example of how to make a custom field have a default value.
+    # As most changes will be Standard, it makes sense to use it as the default.
+    # You can similarly make other custom fields defined above have default values
+    # by providing the name of the custom field to Load (like Change Type is below)
+    # and changing Values to be the default value of the field (similar to how Standard
+    # is set below).
+    #
+    # Remember that the custom field name and default values are case sensitive!
+    #
     my $queue_obj = RT::Queue->new(RT->SystemUser);
     my $queue     = 'Change Management';
     $queue_obj->Load($queue);
@@ -117,5 +144,74 @@ our @Final = sub {
         die $msg unless $ret;
     } else {
         die "Could not set default for: ".$cf->Name;
+    }
+
+    # Create a change management dashboard.
+    # Combine this with the Calendar extension for an even more informative dashboard experience!
+    my $dashboard = RT::Dashboard->new( RT->SystemUser );
+    ( $ret, $msg ) = $dashboard->Save(
+        Name    => 'Change Management',
+        Privacy => join( '-', ref( RT->System ), RT->System->Id ),
+    );
+
+    if ($ret) {
+        my @searches;
+        for my $search_name ( 'Changes Scheduled, Next 7 Days', 'Changes Deployed, Last 30 Days' ) {
+            my ($search) = RT::System->new( RT->SystemUser )->Attributes->Named( 'Search - ' . $search_name );
+            if ($search) {
+                push @searches,
+                    {
+                    pane         => 'body',
+                    portlet_type => 'search',
+                    id           => $search->Id,
+                    description  => "Saved Search: $search_name",
+                    privacy      => join( '-', ref( RT->System ), RT->System->Id ),
+                    };
+            }
+            else {
+                RT->Logger->error("Couldn't find search $search_name");
+            }
+        }
+
+        my $panes = {
+            body => [
+                @searches,
+            ],
+            sidebar => [
+                {   pane         => 'body',
+                    portlet_type => 'component',
+                    component    => 'QuickCreate',
+                    description  => 'QuickCreate',
+                    path         => '/Elements/QuickCreate',
+                },
+                {   pane         => 'sidebar',
+                    portlet_type => 'component',
+                    component    => 'MyReminders',
+                    description  => 'MyReminders',
+                    path         => '/Elements/MyReminders',
+                },
+                {   pane         => 'sidebar',
+                    portlet_type => 'component',
+                    component    => 'Dashboards',
+                    description  => 'Dashboards',
+                    path         => '/Elements/Dashboards',
+                },
+                {   pane         => 'sidebar',
+                    portlet_type => 'component',
+                    component    => 'RefreshHomepage',
+                    description  => 'RefreshHomepage',
+                    path         => '/Elements/RefreshHomepage',
+                },
+            ]
+        };
+
+        # fill content
+        my ( $ret, $msg ) = $dashboard->Update( Panes => $panes );
+        if ( !$ret ) {
+            RT->Logger->error("Couldn't update content for dashboard Change Management: $msg");
+        }
+    }
+    else {
+        RT->Logger->error("Couldn't create dashboard Change Management: $msg");
     }
 };
