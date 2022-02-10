@@ -2,7 +2,7 @@
 # ticket display
 Set(%CustomFieldGroupings,
     'RT::Ticket' => [
-        'Dates' => ['Change Completed'],
+        'Dates' => ['Change Started','Change Completed'],
         'Change Management' => [
             'Change Category',
             'Change Type',

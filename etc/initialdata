@@ -48,22 +48,31 @@ our @CustomFields = (
         SortOrder   => 2
     },
     {
-        Name        => 'Change Completed',
-        EntryHint   => 'Date when this change the change was completed',
-        LookupType  => 'RT::Queue-RT::Ticket',
-        Type        => 'DateTime',
-        ApplyTo     => ['Change Management'],
-        MaxValues   => 1,
-        SortOrder   => 3,
-    },
-    {
         Name        => 'Rollback Plan',
         EntryHint   => 'Explain the backout plan to restore normal operations',
         LookupType  => 'RT::Queue-RT::Ticket',
         Type        => 'Text',
         ApplyTo     => ['Change Management'],
         MaxValues   => 1,
+        SortOrder   => 3,
+    },
+    {
+        Name        => 'Change Started',
+        EntryHint   => 'Date when this change was started',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Type        => 'DateTime',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
         SortOrder   => 4,
+    },
+    {
+        Name        => 'Change Completed',
+        EntryHint   => 'Date when this change was completed',
+        LookupType  => 'RT::Queue-RT::Ticket',
+        Type        => 'DateTime',
+        ApplyTo     => ['Change Management'],
+        MaxValues   => 1,
+        SortOrder   => 5,
     },
 );
 
