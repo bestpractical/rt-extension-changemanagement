@@ -61,7 +61,7 @@ Set(%Lifecycles,
                 label  => 'Start Deployment',
             },
             'approved -> cancelled' => {
-                label  => 'Cancel Deployment',
+                label  => 'Deployment Cancelled',
             },
             'in progress -> deployed' => {
                 label  => 'Deployment Complete',
