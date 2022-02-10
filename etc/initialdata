@@ -102,6 +102,57 @@ our @CustomRoles = (
     },
 );
 
+our @ScripConditions = (
+    {
+        Name        => 'On Change Started',
+        Description => 'When an approved change is started',
+        ExecModule  => 'StatusChange',
+        Argument    => 'old: approved; new: in progress, partially deployed',
+        ApplicableTransTypes => 'Any'
+    },
+    {
+        Name        => 'On Change Completed',
+        Description => 'When an approved change is completed',
+        ExecModule  => 'StatusChange',
+        Argument    => 'new: deployed',
+        ApplicableTransTypes => 'Any'
+    },
+);
+
+our @ScripActions = (
+    {
+        Name        => 'Set Change Started to Today',
+        Description => '',
+        ExecModule  => 'SetCustomFieldDate',
+        Argument    => 'Change Started'
+    },
+    {
+        Name        => 'Set Change Completed to Today',
+        Description => '',
+        ExecModule  => 'SetCustomFieldDate',
+        Argument    => 'Change Completed'
+    },
+);
+
+our @Scrips = (
+    {
+        Queue           => ['Change Management'],
+        Description     => 'On Change Started Set Change Started to Today',
+        ScripCondition  => 'On Change Started',
+        ScripAction     => 'Set Change Started to Today',
+        Template        => 'Blank',
+        Stage           => 'TransactionCreate',
+    },
+    {
+        Queue           => ['Change Management'],
+        Description     => 'On Change Completed Set Change Completed to Today',
+        ScripCondition  => 'On Change Completed',
+        ScripAction     => 'Set Change Completed to Today',
+        Template        => 'Blank',
+        Stage           => 'TransactionCreate',
+    },
+);
+
 # 
 # Create some saved searches; these will form the basis of the dashboard below. Add more
 # to suit your organization's needs.

@@ -181,14 +181,21 @@ Any change that doesn't fall into the other types.
 
 =back
 
-=head3 Deployed Date
-
-Date that the change was successfully deployed (or, partially deployed)
-
 =head3 Rollback Plan
 
 A description of the steps necessary to perform a rollback of the proposed
 changes in the event that the deployment process is unsuccessful.
+
+=head3 Change Started
+
+Date that the change was started. This is B<not> the same as the normal Started
+date on the ticket - Started is set when the ticket is moved to an open status
+(such as approved); Change Started is when someone actually started implementation 
+of the change.
+
+=head3 Change Complete
+
+Date that the change was successfully deployed (or, partially deployed).
 
 =head2 Actions
 
@@ -276,6 +283,11 @@ Using L<RT::Extension::MandatoryOnTransition>, any of the above fields can be ma
 required upon a status change. For example, you may wish to make Implementation Steps,
 Validation Steps, and Impact Assessment required fields before a change request can
 be approved.
+
+=head3 Calendar View
+
+With L<RTx::Calendar>, you can add a calendar portlet to your dashboard, as well
+as a full page calendar view of change management tickets and reminders.
 
 =head3 Default Values for Custom Fields
 
