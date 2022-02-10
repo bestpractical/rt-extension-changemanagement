@@ -69,6 +69,10 @@ our @CustomFields = (
 
 our @Groups = (
     {
+        Name        => 'Change Management',
+        Description => 'People who can create change management tickets and work in change management lifecycle',
+    },
+    {
         Name        => 'Change Review Team',
         Description => 'People responsible for approving change requests',
     },
@@ -99,8 +103,8 @@ our @Attributes = (
       Content     =>
       { Format =>  q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:#',}
                  . q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>/TITLE:Subject',}
-                 . q{Due,'CF.{Change Type}', 'CF.{Change Category}'},
-        Query    => 'Queue = \'Change Management\' AND Status = \'approved\' AND \'due\' <= \'7 days\'',
+                 . q{Due,'CF.{Change Type}', 'CF.{Change Category}',Priority,'CustomRole.{Change Reviewer}.Name','CustomRole.{Change Implementor}.Name','CF.{Change Started}'},
+        Query    => 'Queue = \'Change Management\' AND ( Status = \'approved\' OR Status = \'in progress\' OR Status = \'partially deployed\' ) AND \'due\' <= \'7 days\'',
         OrderBy  => 'due ASC',
       },
     },
@@ -109,7 +113,7 @@ our @Attributes = (
       Content     =>
       { Format =>  q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:#',}
                  . q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>/TITLE:Subject',}
-                 . q{'CF.{Change Completed}','CF.{Change Type}', 'CF.{Change Category}'},
+                 . q{'CF.{Change Type}', 'CF.{Change Category}',Priority,'CustomRole.{Change Reviewer}.Name','CustomRole.{Change Implementor}.Name','CF.{Change Completed}',},
         Query    => 'Queue = \'Change Management\' AND Status = \'deployed\' AND \'CF.{Change Completed}\' >= \'30 days ago\'',
         OrderBy  => 'due ASC',
       },
@@ -177,32 +181,6 @@ our @Final = sub {
             body => [
                 @searches,
             ],
-            sidebar => [
-                {   pane         => 'body',
-                    portlet_type => 'component',
-                    component    => 'QuickCreate',
-                    description  => 'QuickCreate',
-                    path         => '/Elements/QuickCreate',
-                },
-                {   pane         => 'sidebar',
-                    portlet_type => 'component',
-                    component    => 'MyReminders',
-                    description  => 'MyReminders',
-                    path         => '/Elements/MyReminders',
-                },
-                {   pane         => 'sidebar',
-                    portlet_type => 'component',
-                    component    => 'Dashboards',
-                    description  => 'Dashboards',
-                    path         => '/Elements/Dashboards',
-                },
-                {   pane         => 'sidebar',
-                    portlet_type => 'component',
-                    component    => 'RefreshHomepage',
-                    description  => 'RefreshHomepage',
-                    path         => '/Elements/RefreshHomepage',
-                },
-            ]
         };
 
         # fill content
