@@ -153,6 +153,37 @@ our @Scrips = (
     },
 );
 
+# These rights aren't the most useful, but it lets everyone, at minimum,
+# submit a ticket.
+my @EveryoneRights = qw/CreateTicket ReplyToTicket SeeQueue/;
+our @ACL = map {
+    {
+        Right       => $_,
+        Queue       => 'Change Management',
+        GroupDomain => 'SystemInternal',
+        GroupType   => 'Everyone'
+    }
+} @EveryoneRights;
+
+# More useful set of rights. Anyone in these groups can see the entirety of 
+# change management tickets, and if a member of one of these groups
+# is assigned to one of the change management roles, they can perform the
+# appropriate actions.
+my @ChangeManagementRights = qw/CommentOnTicket Watch SeeCustomField
+  SeeQueue ShowTicket OwnTicket WatchAsAdminCC StealTicket TakeTicket
+  ShowTicketComments ModifyTicket ModifyCustomField ShowOutgoingEmail
+/;
+foreach my $group( 'Change Management', 'Change Review Team' ) {
+    push @ACL, map {
+        {
+            Right       => $_,
+            Queue       => 'Change Management',
+            GroupDomain => 'UserDefined',
+            GroupId     => $group,
+        }
+    } @ChangeManagementRights;
+}
+
 # 
 # Create some saved searches; these will form the basis of the dashboard below. Add more
 # to suit your organization's needs.
