@@ -114,5 +114,28 @@ Set(%Lifecycles,
     }
 );
 
+# Delete the =pod and =cut to activate this configuration. 
+# This example illustrates how to make Change Reviewer, Change Implementor,
+# Change Type, Change Category, and Rollback Plan mandatory for approval
+# of a change management ticket. Make sure to enable MandatoryOnTransition in
+# your primary RT configuration by adding the following:
+# Plugin( "RT::Extension::MandatoryOnTransition" );
+
+=pod
+
+Set( %MandatoryOnTransition,
+    'Change Management' => {
+        'requested -> approved' => [ 
+            'CF.Change Type', 
+            'CF.Change Category', 
+            'CF.Rollback Plan', 
+            'CustomRole.Change Reviewer',
+            'CustomRole.Change Implementor',
+        ],
+    },
+);
+
+=cut
+
 1;
 
