@@ -68,18 +68,19 @@ to create tickets in this queue.
 
 =head2 Custom Roles
 
-There are two roles than can be assigned to users that are part of the change 
-management process:
+Users can be assigned several roles that are part of the change management process:
 
 =over
 
 =item Change Reviewer
 
-Someone who can approve a change request
+Person who reviews incoming change requests, and is responsible for approving or
+denying a change request. Can be assigned to a group.
 
 =item Change Implementor
 
-Someone who can implement a change request
+Person who is responsible for implementing a change request. This role can be assigned
+to a group.
 
 =back
 
@@ -191,11 +192,13 @@ changes in the event that the deployment process is unsuccessful.
 Date that the change was started. This is B<not> the same as the normal Started
 date on the ticket - Started is set when the ticket is moved to an open status
 (such as approved); Change Started is when someone actually started implementation 
-of the change.
+of the change. This is set automatically when a change ticket's status changes to
+in progress or partially deployed.
 
 =head3 Change Complete
 
-Date that the change was successfully deployed (or, partially deployed).
+Date that the change was successfully deployed. This is set automatically when a
+change ticket's status changes to deployed.
 
 =head2 Actions
 
@@ -230,18 +233,6 @@ Changes the status of the request to failed. Requires the Change Implementor rol
 =head3 Deployment Cancelled
 
 Cancels the change request (changes status to failed). Requires the Change Implementor role.
-
-=head2 Rights
-
-=head3 Change Reviewer
-
-Person who reviews incoming change requests, and is responsible for approving or
-denying a change request. Can be assigned to a group.
-
-=head3 Change Implementor
-
-Person who is responsible for implementing a change request. This role can be assigned
-to a group.
 
 =head1 CUSTOMIZING AND EXTENDING
 
@@ -282,12 +273,8 @@ could happen if the change goes awry, etc. Text.
 Using L<RT::Extension::MandatoryOnTransition>, any of the above fields can be made
 required upon a status change. For example, you may wish to make Implementation Steps,
 Validation Steps, and Impact Assessment required fields before a change request can
-be approved.
-
-=head3 Calendar View
-
-With L<RTx::Calendar>, you can add a calendar portlet to your dashboard, as well
-as a full page calendar view of change management tickets and reminders.
+be approved. See F<etc/ChangeManagement_Config.pm> for a ready-to-use example with
+the out of the box configuration.
 
 =head3 Default Values for Custom Fields
 
