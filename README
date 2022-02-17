@@ -6,18 +6,22 @@ RT VERSION
     Works with RT 5.
 
 INSTALLATION
-    perl Makefile.PL
-    make
-    make install
+    "perl Makefile.PL"
+    "make"
+    "make install"
         May need root permissions
 
-    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+    Edit your /opt/rt5/etc/RT_SiteConfig.pm
         Add this line:
 
             Plugin('RT::Extension::ChangeManagement');
 
+    "make initdb"
+        Only run this the first time you install this module. If you run
+        this twice, you may end up with duplicate data in your database.
+
     Clear your mason cache
-            rm -rf /opt/rt4/var/mason_data/obj
+            rm -rf /opt/rt5/var/mason_data/obj
 
     Restart your webserver
 
@@ -30,42 +34,202 @@ DESCRIPTION
     extension implements a minimal change management system within RT. It
     provides a framework for handling a variety of change types, and leaves
     a lot of room for growth and flexibility with regards to your
-    organization's practices and procedures.
+    organization's practices and procedures. Out of the box, it resembles a
+    scaled down version of an ITIL-like change management process.
 
     When combined with RT::Extension::MandatoryOnTransition, this extension
     can transform into a fully-featured change management system.
 
   Change Management Queue
-    After installing, you'll see a new queue called "Change Management" for
+    After installing, you'll see a new queue called Change Management for
     tracking all of the incoming change requests. You can change the name to
     anything you like after installing. In a typical configuration, you will
     also want to assign an RT email address, like changes@example.com or
-    crb@example.com (Change Review Board) to create tickets in this queue.
+    crb@example.com (Change Review Team) to create tickets in this queue.
 
   Custom Roles
+    Users can be assigned several roles that are part of the change
+    management process:
+
+    Change Reviewer
+        Person who reviews incoming change requests, and is responsible for
+        approving or denying a change request. Can be assigned to a group.
+
+    Change Implementor
+        Person who is responsible for implementing a change request. This
+        role can be assigned to a group.
+
   Groups
-   Ticket Statuses
+    The Change Management extension introduces one new group to RT: Change
+    Review Team. Any members of this group are capable of approving or
+    rejecting proposed changes in the Change Management queue.
+
+  Ticket Statuses
     Tickets in the change management queue can have any one of the following
     statuses:
 
-    *   Requested
-
+    Requested
         Status given to a new item. Indicates than a change has been
         requested and is awaiting approval.
 
-    *   Approved
-
+    Approved
         Tickets with a status of Requested can be moved to Approved if the
         change has been accepted by the change review team.
 
-    *   Deployed
+    In Progress
+        An approved change that is in the process of being deployed.
 
-  Change Management Lifecycle
+    Partially Deployed
+        The change has been partially deployed; it is either taking an
+        unusually long time to complete, or part of the deployment succeeded
+        while another part failed. Reasons as to why should be detailed in a
+        comment.
+
+    Deployed
+        The change has been deployed successfully.
+
+    Failed
+        The change failed to deploy. Reasons should be detailed in a
+        comment.
+
+    Cancelled
+        This change was cancelled. Reasoning should be provided in a
+        comment.
+
+    Rejected
+        The change was rejected by the review team. Reasoning should be
+        provided in a comment on the ticket.
+
   Custom Fields
    Change Category
+    Specifies the kind of change that is to be performed. Possible values
+    include:
+
+    Configuration Change
+    OS Patching
+    Firmware Update
+    Software Update
+    New Software Install
+    Hardware Repair
+    New Hardware Install
+    Project Implementation
+
    Change Type
-   Deployed Date
+    One of the three types of change types outlined in ITIL:
+
+    Standard
+        A low risk, pre-authorized change that follows a repeatable process.
+        This is the default for new tickets in the Change Management queue.
+
+    Emergency
+        A change that must be performed ASAP, potentially bypassing approval
+        steps.
+
+    Normal
+        Any change that doesn't fall into the other types.
+
    Rollback Plan
+    A description of the steps necessary to perform a rollback of the
+    proposed changes in the event that the deployment process is
+    unsuccessful.
+
+   Change Started
+    Date that the change was started. This is not the same as the normal
+    Started date on the ticket - Started is set when the ticket is moved to
+    an open status (such as approved); Change Started is when someone
+    actually started implementation of the change. This is set automatically
+    when a change ticket's status changes to in progress or partially
+    deployed.
+
+   Change Complete
+    Date that the change was successfully deployed. This is set
+    automatically when a change ticket's status changes to deployed.
+
+  Actions
+   Submit Request
+    Changes the status of a ticket to requested.
+
+   Approve Request
+    Mark a change management request ticket as approved. Requires the Change
+    Reviewer role.
+
+   Deny Request
+    Deny the change management request. Requires the Change Reviewer role.
+
+   Start Deployment
+    Changes the ticket status to in progress. Requires the Change
+    Implementor role.
+
+   Deployment Complete
+    Marks the change request as deployed. Requires the Change Implementor
+    role.
+
+   Partially Deployed
+    Marks the change request as partially deployed. Requires the Change
+    Implementor role.
+
+   Deployment Failed
+    Changes the status of the request to failed. Requires the Change
+    Implementor role.
+
+   Deployment Cancelled
+    Cancels the change request (changes status to failed). Requires the
+    Change Implementor role.
+
+CUSTOMIZING AND EXTENDING
+    There are some ways RT::Extension::ChangeManagement can be customized to
+    provide an even more robust change management system.
+
+  Additional Custom Fields
+    Some ideas of fields that could be added to the change management
+    process might include:
+
+    Change Origin
+        Customer, Vendor, Internal. Dropdown.
+
+    Location
+        Datacenter, customer site, etc. Text.
+
+    Implementation Steps
+        Steps needed to implement proposed change. Text.
+
+    Validation Steps
+        Process for validating a change was deployed successfully. Text.
+
+    Impact Assessment
+        A description of what potential side effects of a proposed change
+        might be, what could happen if the change goes awry, etc. Text.
+
+   Making Custom Fields Required
+    Using RT::Extension::MandatoryOnTransition, any of the above fields can
+    be made required upon a status change. For example, you may wish to make
+    Implementation Steps, Validation Steps, and Impact Assessment required
+    fields before a change request can be approved. See
+    etc/ChangeManagement_Config.pm for a ready-to-use example with the out
+    of the box configuration.
+
+   Default Values for Custom Fields
+    If you look at etc/initialdata in the plugin directory, you will find a
+    section called @Final (unsurprisingly, it is the last section of
+    configuration). There you will find some sample code and documentation
+    for setting a default value for a custom field.
+
+    The process basically boils down to:
+
+    Load a named queue
+    Load a custom field by name
+    Set the default value for that custom field in that queue
+
+  Approvals Queue
+    If you have an established Change Review Board, your organization is
+    likely dealing with a high volume of change requests. Separating
+    requests into a second queue can make it quicker and easier to process,
+    as new requests are not interspersed with other changes in various
+    stages of completion.
+
+    To separate change requests into a separate approvals queue, see the
+    docs in the "Approvals" in Customizing guide.
+
 AUTHOR
     Best Practical Solutions, LLC <modules@bestpractical.com>
 
@@ -79,14 +243,4 @@ LICENSE AND COPYRIGHT
     This is free software, licensed under:
 
       The GNU General Public License, Version 2, June 1991
-
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
-    below:
-
-    Around line 39:
-        You forgot a '=back' before '=head1'
-
-    Around line 97:
-        =back without =over
 
