@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 our @Queues = (
-    { 
+    {
         Name              => 'Change Management',
         Description       => 'Queue for change management requests',
         Lifecycle         => 'Change Management',
@@ -153,9 +153,7 @@ our @Scrips = (
     },
 );
 
-# These rights aren't the most useful, but it lets everyone, at minimum,
-# submit a ticket.
-my @EveryoneRights = qw/CreateTicket ReplyToTicket SeeQueue/;
+my @EveryoneRights = qw/CreateTicket ReplyToTicket SeeQueue ShowTicket SetInitialCustomField/;
 our @ACL = map {
     {
         Right       => $_,
@@ -165,10 +163,9 @@ our @ACL = map {
     }
 } @EveryoneRights;
 
-# More useful set of rights. Anyone in these groups can see the entirety of 
-# change management tickets, and if a member of one of these groups
-# is assigned to one of the change management roles, they can perform the
-# appropriate actions.
+# Anyone in these groups can see the entirety of change management tickets,
+# and if a member of one of these groups is assigned to one of the change
+# management roles, they can perform the appropriate actions.
 my @ChangeManagementRights = qw/CommentOnTicket Watch SeeCustomField
   SeeQueue ShowTicket OwnTicket WatchAsAdminCC StealTicket TakeTicket
   ShowTicketComments ModifyTicket ModifyCustomField ShowOutgoingEmail
@@ -184,10 +181,6 @@ foreach my $group( 'Change Management', 'Change Review Team' ) {
     } @ChangeManagementRights;
 }
 
-# 
-# Create some saved searches; these will form the basis of the dashboard below. Add more
-# to suit your organization's needs.
-#
 our @Attributes = (
     { Name => 'Search - Changes Scheduled, Next 7 Days',
       Description => 'Change management requests due in the next 7 days', # loc
@@ -241,12 +234,27 @@ our @Final = sub {
         die "Could not set default for: ".$cf->Name;
     }
 
-    # Create a change management dashboard.
-    # Combine this with the Calendar extension for an even more informative dashboard experience!
+    my $GroupName = 'Change Management';
+    my $group     = RT::Group->new( RT->SystemUser );
+
+    ( $ret, $msg ) = $group->LoadUserDefinedGroup( $GroupName );
+    die $msg unless $ret;
+
+    my $root = RT::User->new( RT->SystemUser );
+    $root->Load( 'root' );
+
+    ($ret, $msg) = $group->AddMember( $root->PrincipalObj->Id );
+    print "Could not load root user: $msg\n" unless $ret;
+
+    foreach my $right ( qw/SeeGroupDashboard ShowSavedSearches EditSavedSearches ModifyGroupDashboard/ ) {
+        ($ret, $msg) = $group->PrincipalObj->GrantRight( Right => $right, Object => $group );
+        print "Failed to grant right $right: $msg\n" unless $ret;
+    }
+
     my $dashboard = RT::Dashboard->new( RT->SystemUser );
     ( $ret, $msg ) = $dashboard->Save(
         Name    => 'Change Management',
-        Privacy => join( '-', ref( RT->System ), RT->System->Id ),
+        Privacy => 'RT::Group-'.$group->Id,
     );
 
     if ($ret) {

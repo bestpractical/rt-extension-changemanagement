@@ -11,9 +11,8 @@ Set(%CustomFieldGroupings,
     ],
 );
 
-# Creates the change management lifecycle. Allowed status changes, menu actions, 
-# rights, ACLs are defined here. If you're going to make customizations to this
-# extension, most of that work will happen here.
+# Creates the change management lifecycle. Allowed status changes, menu actions,
+# rights, ACLs are defined here.
 Set(%Lifecycles,
     'Change Management' => {
         initial         => [ qw( requested ) ], # loc_qw
@@ -107,14 +106,14 @@ Set(%Lifecycles,
             'deleted'            => 'deleted',
             'in progress'        => 'open',
             'approved'           => 'open',
-            'partially deployed' => 'open', 
+            'partially deployed' => 'open',
             'failed'             => 'resolved',
             'cancelled'          => 'resolved',
         },
     }
 );
 
-# Delete the =pod and =cut to activate this configuration. 
+# Delete the =pod and =cut to activate this configuration.
 # This example illustrates how to make Change Reviewer, Change Implementor,
 # Change Type, Change Category, and Rollback Plan mandatory for approval
 # of a change management ticket. Make sure to enable MandatoryOnTransition in
@@ -125,10 +124,10 @@ Set(%Lifecycles,
 
 Set( %MandatoryOnTransition,
     'Change Management' => {
-        'requested -> approved' => [ 
-            'CF.Change Type', 
-            'CF.Change Category', 
-            'CF.Rollback Plan', 
+        'requested -> approved' => [
+            'CF.Change Type',
+            'CF.Change Category',
+            'CF.Rollback Plan',
             'CustomRole.Change Reviewer',
             'CustomRole.Change Implementor',
         ],
