@@ -32,7 +32,7 @@ Add this line:
 
 =item C<make initdb>
 
-Only run this the first time you install this module. If you run this twice, 
+Only run this the first time you install this module. If you run this twice,
 you may end up with duplicate data in your database.
 
 =item Clear your mason cache
@@ -41,7 +41,7 @@ you may end up with duplicate data in your database.
 
 =item Restart your webserver
 
-=back 
+=back
 
 =head1 DESCRIPTION
 
@@ -50,19 +50,19 @@ Implements a minimalistic change management process within RT.
 It is often the case that businesses that have achieved some level of ISO or
 SOC compliance must have a standardized process by which to handle changes to
 software, hardware, infrastructure, etc. This extension implements a minimal
-change management system within RT. It provides a framework for handling a 
+change management system within RT. It provides a framework for handling a
 variety of change types, and leaves a lot of room for growth and flexibility
 with regards to your organization's practices and procedures. Out of the box,
 it resembles a scaled down version of an ITIL-like change management process.
 
-When combined with L<RT::Extension::MandatoryOnTransition>, this extension 
+When combined with L<RT::Extension::MandatoryOnTransition>, this extension
 can transform into a fully-featured change management system.
 
 =head2 Change Management Queue
 
 After installing, you'll see a new queue called B<Change Management> for tracking
-all of the incoming change requests. You can change the name to anything you like 
-after installing. In a typical configuration, you will also want to assign an RT 
+all of the incoming change requests. You can change the name to anything you like
+after installing. In a typical configuration, you will also want to assign an RT
 email address, like changes@example.com or crb@example.com (Change Review Team)
 to create tickets in this queue.
 
@@ -94,11 +94,11 @@ the Change Management queue.
 
 Tickets in the change management queue can have any one of the following statuses:
 
-=over 
+=over
 
 =item Requested
 
-Status given to a new item. Indicates than a change has been requested and is 
+Status given to a new item. Indicates than a change has been requested and is
 awaiting approval.
 
 =item Approved
@@ -130,7 +130,7 @@ This change was cancelled. Reasoning should be provided in a comment.
 
 =item Rejected
 
-The change was rejected by the review team. Reasoning should be provided in a 
+The change was rejected by the review team. Reasoning should be provided in a
 comment on the ticket.
 
 =back
@@ -165,9 +165,9 @@ Specifies the kind of change that is to be performed. Possible values include:
 
 One of the three types of change types outlined in ITIL:
 
-=over 
+=over
 
-=item Standard 
+=item Standard
 
 A low risk, pre-authorized change that follows a repeatable process. This is the
 default for new tickets in the Change Management queue.
@@ -191,7 +191,7 @@ changes in the event that the deployment process is unsuccessful.
 
 Date that the change was started. This is B<not> the same as the normal Started
 date on the ticket - Started is set when the ticket is moved to an open status
-(such as approved); Change Started is when someone actually started implementation 
+(such as approved); Change Started is when someone actually started implementation
 of the change. This is set automatically when a change ticket's status changes to
 in progress or partially deployed.
 
@@ -263,7 +263,7 @@ Process for validating a change was deployed successfully. Text.
 
 =item Impact Assessment
 
-A description of what potential side effects of a proposed change might be, what 
+A description of what potential side effects of a proposed change might be, what
 could happen if the change goes awry, etc. Text.
 
 =back
@@ -280,7 +280,7 @@ the out of the box configuration.
 
 If you look at F<etc/initialdata> in the plugin directory, you will find a section
 called C<@Final> (unsurprisingly, it is the last section of configuration).
-There you will find some sample code and documentation for setting a default value 
+There you will find some sample code and documentation for setting a default value
 for a custom field.
 
 The process basically boils down to:
@@ -298,8 +298,8 @@ The process basically boils down to:
 =head2 Approvals Queue
 
 If you have an established Change Review Board, your organization is likely dealing
-with a high volume of change requests. Separating requests into a second queue can 
-make it quicker and easier to process, as new requests are not interspersed with 
+with a high volume of change requests. Separating requests into a second queue can
+make it quicker and easier to process, as new requests are not interspersed with
 other changes in various stages of completion.
 
 To separate change requests into a separate approvals queue, see the docs in the
