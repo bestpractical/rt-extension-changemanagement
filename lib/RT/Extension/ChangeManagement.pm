@@ -6,7 +6,7 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-RT-Extension-ChangeManagement - Default Change Management configuration for RT
+RT-Extension-ChangeManagement - Change Management configuration for RT
 
 =head1 RT VERSION
 
@@ -45,66 +45,75 @@ you may end up with duplicate data in your database.
 
 =head1 DESCRIPTION
 
-Implements a minimalistic change management process within RT.
+This extension provides the configuration to implement a change management
+process in L<Request Tracker|https://bestpractical.com/request-tracker>.
 
-It is often the case that businesses that have achieved some level of ISO or
-SOC compliance must have a standardized process by which to handle changes to
-software, hardware, infrastructure, etc. This extension implements a minimal
-change management system within RT. It provides a framework for handling a
-variety of change types, and leaves a lot of room for growth and flexibility
-with regards to your organization's practices and procedures. Out of the box,
-it resembles a scaled down version of an ITIL-like change management process.
+Organizations working to standardize internal processes for ISO or
+SOC compliance must have a standardized way to deploy and track changes to
+software, hardware, infrastructure, etc. This extension implements a
+change management system within RT, providing a framework for handling a
+variety of change types. It uses all core RT features, so everything can be
+modified as needed to align with your organization's practices and procedures.
+As-is, it provides a simple, fully functional implementation of an ITIL-like
+change management process.
 
-When combined with L<RT::Extension::MandatoryOnTransition>, this extension
-can transform into a fully-featured change management system.
+To provide additional validation and required fields for different stages of
+the process, you can install L<RT::Extension::MandatoryOnTransition>. An example
+configuration is provided in the sample configuration file in C<etc/ChangeManagement_Config.pm>.
 
 =head2 Change Management Queue
 
 After installing, you'll see a new queue called B<Change Management> for tracking
 all of the incoming change requests. You can change the name to anything you like
 after installing. In a typical configuration, you will also want to assign an RT
-email address, like changes@example.com or crb@example.com (Change Review Team)
+email address, like I<changes@example.com> or I<crb@example.com> (Change Review Team)
 to create tickets in this queue.
 
 =head2 Custom Roles
 
-Users can be assigned several roles that are part of the change management process:
+The roles below are allow you to assign different users to parts of the change
+management process. In addition to clearly identifying who is responsible for
+parts of the process, these roles can be used to manage rights and notifications
+like email.
 
 =over
 
 =item Change Reviewer
 
 Person who reviews incoming change requests, and is responsible for approving or
-denying a change request. Can be assigned to a group.
+denying a change request.
 
 =item Change Implementor
 
-Person who is responsible for implementing a change request. This role can be assigned
-to a group.
+Person who is responsible for implementing a change request.
 
 =back
 
 =head2 Groups
 
-The Change Management extension introduces one new group to RT: Change Review Team.
-Any members of this group are capable of approving or rejecting proposed changes in
-the Change Management queue.
+Groups are included to make it easy to add users quickly and give
+them sufficient rights to interact with the Change Management queue.
 
-=head2 Ticket Statuses
+The Change Management group gives a set of rights appropriate for staff who
+will work with chagne management tickets. It allows them to take tickets,
+comment, change custom fields, etc. You can refine all of these after you
+install the extension.
 
-Tickets in the change management queue can have any one of the following statuses:
+=head2 Change Management Lifecycle
+
+The Change Management lifecycle provides a set of common statuses. You can update
+this as needed to add or remove statuses and transitions.
 
 =over
 
 =item Requested
 
-Status given to a new item. Indicates than a change has been requested and is
+Status given to a new change request. Indicates than a change has been requested and is
 awaiting approval.
 
 =item Approved
 
-Tickets with a status of Requested can be moved to Approved if the change has been
-accepted by the change review team.
+For changes that are approved but not yet implemented.
 
 =item In Progress
 
@@ -137,33 +146,22 @@ comment on the ticket.
 
 =head2 Custom Fields
 
+Some common custom fields are provided to track additional information about
+changes. The provided custom fields can be modified as needed, to add or remove
+available values in dropdowns, for example.
+
+You can also add more custom fields as needed. A C<%CustomFieldGroupings> configuration
+is provided to group custom fields in a Change Management portlet. You can add
+new custom fields to this configuration to include them in this section.
+
 =head3 Change Category
 
-Specifies the kind of change that is to be performed. Possible values include:
-
-=over
-
-=item Configuration Change
-
-=item OS Patching
-
-=item Firmware Update
-
-=item Software Update
-
-=item New Software Install
-
-=item Hardware Repair
-
-=item New Hardware Install
-
-=item Project Implementation
-
-=back
+Specifies the kind of change that is to be performed.
 
 =head3 Change Type
 
-One of the three types of change types outlined in ITIL:
+One of the three types of changes. The initial values are those
+outlined in ITIL:
 
 =over
 
@@ -190,54 +188,30 @@ changes in the event that the deployment process is unsuccessful.
 =head3 Change Started
 
 Date that the change was started. This is B<not> the same as the normal Started
-date on the ticket - Started is set when the ticket is moved to an open status
-(such as approved); Change Started is when someone actually started implementation
-of the change. This is set automatically when a change ticket's status changes to
+date on the ticket. Started is set when the ticket is moved to an open status
+(such as approved); Change Started is when someone actually started implementing
+the change.
+
+A scrip is provided to automatically set this when status changes to
 in progress or partially deployed.
 
 =head3 Change Complete
 
-Date that the change was successfully deployed. This is set automatically when a
-change ticket's status changes to deployed.
+Date that the change was successfully deployed. A scrip is provided to automatically
+set this when status changes to deployed.
 
-=head2 Actions
+=head2 Change Management Dashboard
 
-=head3 Submit Request
-
-Changes the status of a ticket to requested.
-
-=head3 Approve Request
-
-Mark a change management request ticket as approved. Requires the Change Reviewer role.
-
-=head3 Deny Request
-
-Deny the change management request. Requires the Change Reviewer role.
-
-=head3 Start Deployment
-
-Changes the ticket status to in progress. Requires the Change Implementor role.
-
-=head3 Deployment Complete
-
-Marks the change request as deployed. Requires the Change Implementor role.
-
-=head3 Partially Deployed
-
-Marks the change request as partially deployed. Requires the Change Implementor role.
-
-=head3 Deployment Failed
-
-Changes the status of the request to failed. Requires the Change Implementor role.
-
-=head3 Deployment Cancelled
-
-Cancels the change request (changes status to failed). Requires the Change Implementor role.
+A Change Management dashboard is installed with two saved searches included,
+one for upcoming changes and one for recently completed changes. These are
+useful for tracking change tickets and are also good examples of the types of
+saved searches and dashboards you can create for different participants in the
+change process.
 
 =head1 CUSTOMIZING AND EXTENDING
 
-There are some ways RT::Extension::ChangeManagement can be customized to provide
-an even more robust change management system.
+Since this extension uses core RT features, it's easy for an RT administrator
+to customize various parts. Below are some ideas.
 
 =head2 Additional Custom Fields
 
@@ -278,32 +252,9 @@ the out of the box configuration.
 
 =head3 Default Values for Custom Fields
 
-If you look at F<etc/initialdata> in the plugin directory, you will find a section
-called C<@Final> (unsurprisingly, it is the last section of configuration).
-There you will find some sample code and documentation for setting a default value
-for a custom field.
-
-The process basically boils down to:
-
-=over
-
-=item Load a named queue
-
-=item Load a custom field by name
-
-=item Set the default value for that custom field in that queue
-
-=back
-
-=head2 Approvals Queue
-
-If you have an established Change Review Board, your organization is likely dealing
-with a high volume of change requests. Separating requests into a second queue can
-make it quicker and easier to process, as new requests are not interspersed with
-other changes in various stages of completion.
-
-To separate change requests into a separate approvals queue, see the docs in the
-L<Customizing/Approvals> guide.
+As an RT admin, you can go to Admin > Queues > Change Management, then click on
+Default Values in the submenu. From that page, you can set or change the default
+values for assigned custom fields.
 
 =head1 AUTHOR
 
