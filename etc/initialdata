@@ -92,13 +92,11 @@ our @CustomRoles = (
         Name        => 'Change Reviewer',
         Description => 'The person asked to review the change request',
         ApplyTo     => 'Change Management',
-        MaxValues   => 1,
     },
     {
         Name        => 'Change Implementor',
         Description => 'The person asked to implement the change request',
         ApplyTo     => 'Change Management',
-        MaxValues   => 1,
     },
 );
 
@@ -205,16 +203,7 @@ our @Attributes = (
 );
 
 our @Final = sub {
-    #
-    # This is an example of how to make a custom field have a default value.
-    # As most changes will be Standard, it makes sense to use it as the default.
-    # You can similarly make other custom fields defined above have default values
-    # by providing the name of the custom field to Load (like Change Type is below)
-    # and changing Values to be the default value of the field (similar to how Standard
-    # is set below).
-    #
-    # Remember that the custom field name and default values are case sensitive!
-    #
+    # Set some default values for custom fields
     my $queue_obj = RT::Queue->new(RT->SystemUser);
     my $queue     = 'Change Management';
     $queue_obj->Load($queue);
