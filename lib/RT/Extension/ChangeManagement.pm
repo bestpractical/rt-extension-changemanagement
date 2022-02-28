@@ -61,6 +61,9 @@ To provide additional validation and required fields for different stages of
 the process, you can install L<RT::Extension::MandatoryOnTransition>. An example
 configuration is provided in the sample configuration file in C<etc/ChangeManagement_Config.pm>.
 
+L<We've provided a walkthrough video|https://youtu.be/uQEEf7SGlkg> to demonstrate
+some of the functionality available in the change management extension.
+
 =head2 Change Management Queue
 
 After installing, you'll see a new queue called B<Change Management> for tracking
