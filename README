@@ -5,9 +5,9 @@ RT VERSION
     Works with RT 5.
 
 INSTALLATION
-    perl Makefile.PL
-    make
-    make install
+    "perl Makefile.PL"
+    "make"
+    "make install"
         May need root permissions
 
     Edit your /opt/rt5/etc/RT_SiteConfig.pm
@@ -15,7 +15,7 @@ INSTALLATION
 
             Plugin('RT::Extension::ChangeManagement');
 
-    make initdb
+    "make initdb"
         Only run this the first time you install this module. If you run
         this twice, you may end up with duplicate data in your database.
 
@@ -42,7 +42,11 @@ DESCRIPTION
     stages of the process, you can install
     RT::Extension::MandatoryOnTransition. An example configuration is
     provided in the sample configuration file in
-    etc/ChangeManagement_Config.pm.
+    "etc/ChangeManagement_Config.pm".
+
+    We've provided a walkthrough video <https://youtu.be/uQEEf7SGlkg> to
+    demonstrate some of the functionality available in the change management
+    extension.
 
   Change Management Queue
     After installing, you'll see a new queue called Change Management for
