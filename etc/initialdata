@@ -79,11 +79,7 @@ our @CustomFields = (
 our @Groups = (
     {
         Name        => 'Change Management',
-        Description => 'People who can create change management tickets and work in change management lifecycle',
-    },
-    {
-        Name        => 'Change Review Team',
-        Description => 'People responsible for approving change requests',
+        Description => 'People who can create change management tickets, approve requests, and work in change management lifecycle',
     },
 );
 
@@ -161,23 +157,21 @@ our @ACL = map {
     }
 } @EveryoneRights;
 
-# Anyone in these groups can see the entirety of change management tickets,
-# and if a member of one of these groups is assigned to one of the change
-# management roles, they can perform the appropriate actions.
+# Anyone in this group can see the entirety of change management tickets,
+# and if assigned to one of the change management roles, they can perform
+# the appropriate actions.
 my @ChangeManagementRights = qw/CommentOnTicket Watch SeeCustomField
   SeeQueue ShowTicket OwnTicket WatchAsAdminCC StealTicket TakeTicket
   ShowTicketComments ModifyTicket ModifyCustomField ShowOutgoingEmail
 /;
-foreach my $group( 'Change Management', 'Change Review Team' ) {
-    push @ACL, map {
-        {
-            Right       => $_,
-            Queue       => 'Change Management',
-            GroupDomain => 'UserDefined',
-            GroupId     => $group,
-        }
-    } @ChangeManagementRights;
-}
+push @ACL, map {
+    {
+        Right       => $_,
+        Queue       => 'Change Management',
+        GroupDomain => 'UserDefined',
+        GroupId     => 'Change Management',
+    }
+} @ChangeManagementRights;
 
 our @Attributes = (
     { Name => 'Search - Changes Scheduled, Next 7 Days',
