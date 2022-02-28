@@ -72,6 +72,23 @@ after installing. In a typical configuration, you will also want to assign an RT
 email address, like I<changes@example.com> or I<crb@example.com> (Change Review Team)
 to create tickets in this queue.
 
+=head3 Rights
+
+By default, Everyone can see the queue, create tickets, and view tickets. All
+users can also set custom fields on create, but only then. You can grant more
+rights if your change requestors need to update custom fields after the
+ticket is created.
+
+The Change Management group has more rights to work on change tickets including
+taking ownership and approving or rejecting requests.
+
+Some custom rights are available if you go to Admin > Queues, click on
+Change Management, then click Group Rights. The "Status changes" tab has
+specific rights to allow users to "Approve Requests" and "Implement Changes".
+By default, the Change Reviewer role can "Approve Requests" and the
+Change Implementor role can "Implement Changes". If this is too restrictive
+for your workflow, you can grant these to more users, possibly via a group.
+
 =head2 Custom Roles
 
 The roles below are allow you to assign different users to parts of the change

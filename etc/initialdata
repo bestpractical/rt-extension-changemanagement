@@ -173,6 +173,20 @@ push @ACL, map {
     }
 } @ChangeManagementRights;
 
+push @ACL,
+    {
+        Right       => 'Approve Requests',
+        Queue       => 'Change Management',
+        GroupDomain => 'RT::Queue-Role',
+        CustomRole  => 'Change Reviewer',
+    },
+    {
+        Right       => 'Implement Changes',
+        Queue       => 'Change Management',
+        GroupDomain => 'RT::Queue-Role',
+        CustomRole  => 'Change Implementor',
+    };
+
 our @Attributes = (
     { Name => 'Search - Changes Scheduled, Next 7 Days',
       Description => 'Change management requests due in the next 7 days', # loc

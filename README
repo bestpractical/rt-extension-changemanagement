@@ -5,9 +5,9 @@ RT VERSION
     Works with RT 5.
 
 INSTALLATION
-    "perl Makefile.PL"
-    "make"
-    "make install"
+    perl Makefile.PL
+    make
+    make install
         May need root permissions
 
     Edit your /opt/rt5/etc/RT_SiteConfig.pm
@@ -15,7 +15,7 @@ INSTALLATION
 
             Plugin('RT::Extension::ChangeManagement');
 
-    "make initdb"
+    make initdb
         Only run this the first time you install this module. If you run
         this twice, you may end up with duplicate data in your database.
 
@@ -42,7 +42,7 @@ DESCRIPTION
     stages of the process, you can install
     RT::Extension::MandatoryOnTransition. An example configuration is
     provided in the sample configuration file in
-    "etc/ChangeManagement_Config.pm".
+    etc/ChangeManagement_Config.pm.
 
     We've provided a walkthrough video <https://youtu.be/uQEEf7SGlkg> to
     demonstrate some of the functionality available in the change management
@@ -54,6 +54,23 @@ DESCRIPTION
     anything you like after installing. In a typical configuration, you will
     also want to assign an RT email address, like *changes@example.com* or
     *crb@example.com* (Change Review Team) to create tickets in this queue.
+
+   Rights
+    By default, Everyone can see the queue, create tickets, and view
+    tickets. All users can also set custom fields on create, but only then.
+    You can grant more rights if your change requestors need to update
+    custom fields after the ticket is created.
+
+    The Change Management group has more rights to work on change tickets
+    including taking ownership and approving or rejecting requests.
+
+    Some custom rights are available if you go to Admin > Queues, click on
+    Change Management, then click Group Rights. The "Status changes" tab has
+    specific rights to allow users to "Approve Requests" and "Implement
+    Changes". By default, the Change Reviewer role can "Approve Requests"
+    and the Change Implementor role can "Implement Changes". If this is too
+    restrictive for your workflow, you can grant these to more users,
+    possibly via a group.
 
   Custom Roles
     The roles below are allow you to assign different users to parts of the

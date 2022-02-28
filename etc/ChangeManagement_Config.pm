@@ -34,12 +34,12 @@ Set(%Lifecycles,
             rejected             => [ qw( approved deployed failed cancelled deleted ), 'in progress', 'partially deployed' ],
         },
         rights => {
-            'requested -> approved'             => 'Change Reviewer',
-            'requested -> rejected'             => 'Change Reviewer',
-            'approved -> in progress'           => 'Change Implementor',
-            'in progress -> deployed'           => 'Change Implementor',
-            'in progress -> partially deployed' => 'Change Implementor',
-            'in progress -> failed'             => 'Change Implementor',
+            'requested -> approved'             => 'Approve Requests',
+            'requested -> rejected'             => 'Approve Requests',
+            'approved -> in progress'           => 'Implement Changes',
+            'in progress -> deployed'           => 'Implement Changes',
+            'in progress -> partially deployed' => 'Implement Changes',
+            'in progress -> failed'             => 'Implement Changes',
         },
         actions => [
             '* -> requested' => {
