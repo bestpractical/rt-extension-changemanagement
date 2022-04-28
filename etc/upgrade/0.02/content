@@ -1,0 +1,63 @@
+use strict;
+use warnings;
+
+our @Final = (
+    sub {
+        RT->Logger->debug("Converting attributes");
+
+        my $attribute = RT::Attribute->new( RT->SystemUser );
+        $attribute->LoadByNameAndObject( Name => 'Changes Scheduled, Next 7 Days', Object => RT->SystemUser );
+        my ($status, $msg) = $attribute->__Set( Field => 'Name', Value => 'SavedSearch' );
+        RT->Logger->warning( "Couldn't change attribute $msg" ) unless $status;
+        ($status, $msg) = $attribute->__Set( Field => 'Description', Value => 'Changes Scheduled, Next 7 Days' );
+        RT->Logger->warning( "Couldn't change attribute $msg" ) unless $status;
+
+        $attribute = RT::Attribute->new( RT->SystemUser );
+        $attribute->LoadByNameAndObject( Name => 'Changes Deployed, Last 30 Days', Object => RT->SystemUser );
+        ($status, $msg) = $attribute->__Set( Field => 'Name', Value => 'SavedSearch' );
+        RT->Logger->warning( "Couldn't change attribute $msg" ) unless $status;
+        ($status, $msg) = $attribute->__Set( Field => 'Description', Value => 'Changes Deployed, Last 30 Days' );
+        RT->Logger->warning( "Couldn't change attribute $msg" ) unless $status;
+    },
+    sub {
+        RT->Logger->debug("Converting dashboards");
+
+        my $dashboard = RT::Dashboard->new( RT->SystemUser );
+        $dashboard->LoadByNameAndObject( Name => 'ChangeManagement', Object => RT->SystemUser );
+
+        my @searches;
+        for my $search_desc ( 'Changes Scheduled, Next 7 Days', 'Changes Deployed, Last 30 Days' ) {
+            my $search = RT::Attribute->new( RT->SystemUser );
+            my ( $ret, $msg ) = $search->LoadByCols(
+                Name        => 'SavedSearch',
+                Description => $search_desc,
+            );
+            if ($search && $ret) {
+                push @searches,
+                    {
+                    pane         => 'body',
+                    portlet_type => 'search',
+                    id           => $search->Id,
+                    description  => "Saved Search: $search_desc",
+                    privacy      => join( '-', ref( RT->System ), RT->System->Id ),
+                    };
+                } else {
+                    RT->Logger->error( "Could not load saved search '$search_desc': $msg" );
+                }
+        }
+
+        my $panes = {
+            body => [
+                @searches,
+            ],
+        };
+
+        # fill content
+        my ( $ret, $msg ) = $dashboard->Update( Panes => $panes );
+        if ( !$ret ) {
+            RT->Logger->error("Couldn't update content for dashboard Change Management: $msg");
+        }
+    },
+);
+
+
