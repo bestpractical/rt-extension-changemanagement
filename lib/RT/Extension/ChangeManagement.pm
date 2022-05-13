@@ -43,6 +43,11 @@ you may end up with duplicate data in your database.
 
 =back
 
+=head1 UPGRADING
+
+To upgrade from an earlier version, see the instructions in the L<UPGRADING|UPGRADING.pod>
+document.
+
 =head1 DESCRIPTION
 
 This extension provides the configuration to implement a change management
