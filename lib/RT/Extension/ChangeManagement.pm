@@ -35,6 +35,9 @@ Add this line:
 Only run this the first time you install this module. If you run this twice,
 you may end up with duplicate data in your database.
 
+If you are upgrading this module, check the upgrading instructions below
+in case changes need to be made to your database.
+
 =item Clear your mason cache
 
     rm -rf /opt/rt5/var/mason_data/obj
@@ -45,8 +48,15 @@ you may end up with duplicate data in your database.
 
 =head1 UPGRADING
 
-To upgrade from an earlier version, see the instructions in the L<UPGRADING|UPGRADING.pod>
-document.
+If you are upgrading from version 0.01, you need to run an upgrade step
+on your RT database. Run the following from inside the source of this
+extension:
+
+    /opt/rt5/sbin/rt-setup-database --action insert --datafile etc/upgrade/0.02/content \
+        --package RT::Extension::ChangeManagement --ext-version 0.02
+
+It will prompt you for your DBA password, and should complete without
+error.
 
 =head1 DESCRIPTION
 
